@@ -4,7 +4,8 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const router = express.Router();
-const {createUser} = require("./controllers/createUser");
+const { createUser } = require("./controllers/userController");
+const { login } = require("./controllers/authController");
 
 mongoose
   .connect(process.env.DB_LOCAL, {
@@ -22,8 +23,9 @@ app.use(bodyParser.json());
 
 app.use(router);
 
-router.route("/users")
-.post(createUser)
+router.route("/users").post(createUser);
+
+router.route("/auth/login").post(login);
 
 app.listen(process.env.PORT, () => {
   console.log("app is running on port ", process.env.PORT);
