@@ -14,7 +14,7 @@ exports.createHotel = async function (req, res) {
     description,
     availableRooms,
     roomType,
-    photo,
+    photos,
   } = req.body;
   try {
     const hotel = await Hotel.create({
@@ -24,7 +24,7 @@ exports.createHotel = async function (req, res) {
       description,
       availableRooms,
       roomType,
-      photo,
+      photos,
     });
     return res.status(200).json({ status: "ok", data: hotel });
   } catch (err) {

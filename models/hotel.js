@@ -21,17 +21,21 @@ const hotelSchema = mongoose.Schema({
     minLength: 10,
     maxLength: 500,
   },
-  availableRooms: {
-    type: Number,
-    required: true,
-  },
-  roomType: {
-    type: String,
-    required: true,
-  },
-  photo: {
-    type: String,
-  },
+  availableRooms: [
+    {
+      type: { type: String, required: true },
+      roomQuantity: { type: Number, required: true },
+      price: { type: Number, required: true },
+      _id: false,
+    },
+  ],
+
+  photos: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
 });
 
 hotelSchema.set("toJSON", {
