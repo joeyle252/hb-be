@@ -3,15 +3,7 @@ const Hotel = require("../models/hotel");
 // just only admin can create, update, delete hotel => not setup logic for admin yet
 
 exports.getHotelList = async function (req, res) {
-  // let queries = [];
-  // if (req.query.userId) {
-  //     queries.push( {creatorId: req.query.userId })
-  // }
-  // if (req.query.categoryId) {
-  //     queries.push({categoryIds: req.query.categoryId })
-  // }
   let queries = [];
-
   if (req.query.destination) {
     queries.push({
       address: { $regex: req.query.destination, $options: "i" },
@@ -21,14 +13,14 @@ exports.getHotelList = async function (req, res) {
     //need to sanitize (clean or validate) req.query.roomQuantity
     queries.push({
       $where: `function () {
-        const totalRooms =
-          this.availableRooms[0].roomQuantity +
-          this.availableRooms[1].roomQuantity;
-        if (totalRooms >= ${req.query.roomQuantity}) {
-          return true;
-        }
-        return false;
-      }`,
+          const totalRooms =
+            this.availableRooms[0].roomQuantity +
+            this.availableRooms[1].roomQuantity;
+          if (totalRooms >= ${req.query.roomQuantity}) {
+            return true;
+          }
+          return false;
+        }`,
     });
   }
   if (queries.length === 0) {
@@ -66,3 +58,13 @@ exports.createHotel = async function (req, res) {
 };
 
 exports.updateHotel = async function (req, res) {};
+
+exports.getHotelDetail = async function (req, res, next) {
+  try {
+    const hotel = await Hotel.findById(req.params.id).exec();
+    console.log("hotelDetail", hotel);
+    return res.status(200).json({ status: "ok", hotel: hotel });
+  } catch (err) {
+    return res.status(400).json({ status: "fail", error: err.message });
+  }
+};

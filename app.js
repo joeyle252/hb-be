@@ -7,7 +7,11 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { createUser, updateUser } = require("./controllers/userController");
 const { login } = require("./controllers/authController");
-const { createHotel, getHotelList } = require("./controllers/hotelController");
+const {
+  createHotel,
+  getHotelList,
+  getHotelDetail,
+} = require("./controllers/hotelController");
 const {
   createBooking,
   updateBooking,
@@ -31,13 +35,13 @@ app.use(bodyParser.json());
 app.use(router);
 
 router.post("/users", createUser);
-
 router.put("/user/:userId", updateUser);
 
 router.post("/auth/login", login);
 
 router.post("/hotel", createHotel);
 router.get("/hotels", getHotelList);
+router.get("/hotel/:id", getHotelDetail);
 
 router.post("/bookroom", createBooking);
 router.put("/user/bookingId", updateBooking);
