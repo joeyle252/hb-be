@@ -3,6 +3,8 @@ const Hotel = require("../models/hotel");
 // just only admin can create, update, delete hotel => not setup logic for admin yet
 
 exports.getHotelList = async function (req, res) {
+  let page = Number(req.query.page) || 1;
+  let limit = 8;
   let queries = [];
   if (req.query.destination) {
     queries.push({
@@ -23,11 +25,18 @@ exports.getHotelList = async function (req, res) {
         }`,
     });
   }
+
   if (queries.length === 0) {
-    const hotels = await Hotel.find({});
+    const hotels = await Hotel.find({})
+      .sort({ update_at: 1 }) // keep item in the same order each time
+      .skip((page - 1) * limit) // example: page=1, will skip 8 first items
+      .limit(limit); //the limit return every page is 8
     return res.status(200).json({ status: "ok", hotels: hotels });
   }
-  const hotels = await Hotel.find({ $and: queries });
+  const hotels = await Hotel.find({ $and: queries })
+    .sort({ update_at: 1 })
+    .skip((page - 1) * limit)
+    .limit(limit);
   return res.status(200).json({ status: "ok", hotels: hotels });
 };
 
