@@ -25,6 +25,19 @@ exports.getHotelList = async function (req, res) {
         }`,
     });
   }
+  //debugger;
+  if (req.query.starRating) {
+    const starRatings = req.query.starRating
+      .split(",")
+      .map((num) => Number(num)); // from ["5,4,3,2"] to ["5","4","3","2"] to [5,4,3,2]
+    const starRatingQueries = starRatings.map((starRating) => {
+      return { starRating: starRating };
+    });
+    queries.push({
+      $or: starRatingQueries,
+    });
+  }
+
 
   if (queries.length === 0) {
     const hotels = await Hotel.find({})

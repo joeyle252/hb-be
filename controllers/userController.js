@@ -2,15 +2,19 @@ const User = require("../models/user");
 
 exports.createUser = async function (req, res) {
   try {
-    const { name, email, password } = req.body;
-    console.log(name, email, password);
+    const { firstName, lastName, email, password } = req.body;
+
     const user = await User.create({
-      name: name,
+      firstName: firstName,
+      lastName: lastName,
       email: email,
       password: password,
     });
+    const token = await user.generateToken();
 
-    return res.status(201).json({ status: "ok", data: user });
+    return res
+      .status(201)
+      .json({ status: "ok", user: { ...user.toJSON(), token } });
   } catch (err) {
     return res.status(400).json({
       status: "fail",
@@ -23,9 +27,10 @@ exports.updateUser = async (req, res) => {
   try {
     const user = await User.findOne({ _id: req.params.userId });
     //changed old => to new
-    user.name = req.body.name;
+    user.firstName = req.body.firstName;
+    user.lastName = req.body.lastName;
     user.email = req.body.email;
-    user.password = req.body.email;
+    user.password = req.body.password;
     await user.save(); // save new information
     res.json(user);
   } catch (err) {

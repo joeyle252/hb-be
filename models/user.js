@@ -5,9 +5,16 @@ const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
-  name: {
+  firstName: {
     type: String,
-    required: [true, "User must have a name"],
+    required: [true, "User must have a first name"],
+    trim: true,
+    toLowerCase: true,
+    minLength: 3,
+  },
+  lastName: {
+    type: String,
+    required: [true, "User must have a last name"],
     trim: true,
     toLowerCase: true,
     minLength: 3,
@@ -28,11 +35,6 @@ const userSchema = mongoose.Schema({
     type: String,
     required: [true, "User must have a password"],
   },
-  tokens: [
-    {
-      type: String,
-    },
-  ],
 });
 
 userSchema.statics.loginWithCredentials = async (email, password) => {
@@ -49,8 +51,6 @@ userSchema.methods.generateToken = async function () {
     { email: this.email, id: this._id },
     process.env.JWT_SECRET
   );
-  this.tokens.push(jsonToken);
-  await this.save();
   return jsonToken;
 };
 

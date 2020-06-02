@@ -34,7 +34,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(router);
 
-router.post("/users", createUser);
+router.post("/user", createUser);
 router.put("/user/:userId", updateUser);
 
 router.post("/auth/login", login);
