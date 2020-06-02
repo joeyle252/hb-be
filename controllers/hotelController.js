@@ -38,6 +38,13 @@ exports.getHotelList = async function (req, res) {
     });
   }
 
+  if (req.query.priceMaximum) {
+    const priceMaximum = Number(req.query.priceMaximum);
+    queries.push({
+      "availableRooms.price": { $lte: priceMaximum },
+      //mongo will find the hotel where at least one price of one room type in the hotel less than or equal to priceMaximum
+    });
+  }
 
   if (queries.length === 0) {
     const hotels = await Hotel.find({})
