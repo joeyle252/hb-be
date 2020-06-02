@@ -47,7 +47,7 @@ userSchema.statics.loginWithCredentials = async (email, password) => {
 userSchema.methods.generateToken = async function () {
   const jsonToken = jwt.sign(
     { email: this.email, id: this._id },
-    process.env.SECRET
+    process.env.JWT_SECRET
   );
   this.tokens.push(jsonToken);
   await this.save();

@@ -1,7 +1,7 @@
 const Booking = require("../models/booking");
 
 exports.createBooking = async function (req, res) {
-  const { hotelName, checkIn, checkOut } = req.body;
+  const { creatorId, hotelId, checkIn, checkOut, totalPrice } = req.body;
   const {
     firstName,
     lastName,
@@ -9,11 +9,12 @@ exports.createBooking = async function (req, res) {
     email,
     phoneNumber,
   } = req.body.guestInformation;
-  const { roomType, roomQuantity } = req.body.selectedRoom;
+  const { standard, deluxe } = req.body.selectedRooms;
 
   try {
     const booking = await Booking.create({
-      hotelName,
+      creatorId,
+      hotelId,
       checkIn,
       checkOut,
       guestInformation: {
@@ -23,10 +24,11 @@ exports.createBooking = async function (req, res) {
         email,
         phoneNumber,
       },
-      selectedRoom: {
-        roomType,
-        roomQuantity,
+      selectedRooms: {
+        standard,
+        deluxe,
       },
+      totalPrice,
     });
     return res.status(200).json({ status: "ok", data: booking });
   } catch (err) {
@@ -37,7 +39,7 @@ exports.createBooking = async function (req, res) {
 exports.updateBooking = async function (req, res, next) {
   try {
     const booking = await BookingModel.findById(req.params.bookingId).exec();
-    if (tour.creatorId.toString() === req.token.userId) {
+    if (booking.creatorId.toString() === req.token.userId) {
       (booking.hotelName = req.body.hotelName),
         (booking.checkIn = req.body.checkIn),
         (booking.checkOut = req.body.checkOut),
@@ -49,12 +51,10 @@ exports.updateBooking = async function (req, res, next) {
         req.body.guestInformation.phoneNumber;
       booking.guestInformation.email = req.body.guestInformation.email;
     } else {
-      res
-        .status(403)
-        .json({
-          status: "fail",
-          message: "You are not allow to update this booking",
-        });
+      res.status(403).json({
+        status: "fail",
+        message: "You are not allow to update this booking",
+      });
     }
   } catch (err) {
     return res.status(400).json({ status: "fail", error: err.message });

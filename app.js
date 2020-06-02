@@ -43,7 +43,7 @@ router.post("/hotel", createHotel);
 router.get("/hotels", getHotelList);
 router.get("/hotel/:id", getHotelDetail);
 
-router.post("/bookroom", createBooking);
+router.post("/booking", createBooking);
 router.put("/user/bookingId", updateBooking);
 
 app.listen(process.env.PORT, () => {

@@ -5,12 +5,12 @@ const bookingSchema = mongoose.Schema({
   creatorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true,
+    required: [true, "you must login before make a booking"],
   },
-  hotelName: {
-    type: String,
+  hotelId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hotel",
     required: [true, "your booking must have a hotel name"],
-    toLowerCase: true,
   },
   checkIn: {
     type: String,
@@ -48,15 +48,19 @@ const bookingSchema = mongoose.Schema({
       required: [true, "your booking must have a phone number"],
     },
   },
-  selectedRoom: {
-    roomType: {
-      type: String,
-      required: [true, "your booking must have a room type"],
+  selectedRooms: {
+    standard: {
+      type: Number,
+      required: [true, "your booking must have a number of Standard room"],
     },
-    roomQuantity: {
-      type: String,
-      required: [true, "your booking must have number of room"],
+    deluxe: {
+      type: Number,
+      required: [true, " your booking must have a number of Deluxe Room"],
     },
+  },
+  totalPrice: {
+    type: Number,
+    reuired: [true, "Please put a total price"],
   },
 });
 
