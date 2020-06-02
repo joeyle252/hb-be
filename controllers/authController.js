@@ -7,7 +7,9 @@ exports.login = async function (req, res) {
     const user = await User.loginWithCredentials(email, password);
     const token = await user.generateToken();
 
-    return res.status(200).json({ status: "ok", data: token });
+    return res
+      .status(200)
+      .json({ status: "ok", user: { ...user.toJSON(), token } });
   } catch (err) {
     return res.status(400).json({ status: "fail", error: err.message });
   }
