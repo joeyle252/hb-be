@@ -11,20 +11,21 @@ exports.getHotelList = async function (req, res) {
       address: { $regex: req.query.destination, $options: "i" },
     });
   }
-  if (req.query.roomQuantity) {
-    //need to sanitize (clean or validate) req.query.roomQuantity
-    queries.push({
-      $where: `function () {
-          const totalRooms =
-            this.availableRooms[0].roomQuantity +
-            this.availableRooms[1].roomQuantity;
-          if (totalRooms >= ${req.query.roomQuantity}) {
-            return true;
-          }
-          return false;
-        }`,
-    });
-  }
+  // if (req.query.roomQuantity) {
+  //   //need to sanitize (clean or validate) req.query.roomQuantity
+  //   queries.push({
+  //     $where: `function () {
+  //         const totalRooms =
+  //           this.availableRooms[0].roomQuantity +
+  //           this.availableRooms[1].roomQuantity;
+  //         if (totalRooms >= ${req.query.roomQuantity}) {
+  //           return true;
+  //         }
+  //         return false;
+  //       }`,
+  //   });
+  // }
+
   //debugger;
   if (req.query.starRating) {
     const starRatings = req.query.starRating
@@ -53,10 +54,19 @@ exports.getHotelList = async function (req, res) {
       .limit(limit); //the limit return every page is 8
     return res.status(200).json({ status: "ok", hotels: hotels });
   }
-  const hotels = await Hotel.find({ $and: queries })
+  let hotels = await Hotel.find({ $and: queries })
     .sort({ update_at: 1 })
     .skip((page - 1) * limit)
     .limit(limit);
+  hotels = hotels.filter((hotel) => {
+    const totalRooms =
+      hotel.availableRooms[0].roomQuantity +
+      hotel.availableRooms[1].roomQuantity;
+    if (totalRooms >= req.query.roomQuantity) {
+      return true;
+    }
+    return false;
+  });
   return res.status(200).json({ status: "ok", hotels: hotels });
 };
 
