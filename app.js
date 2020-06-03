@@ -7,7 +7,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { createUser, updateUser } = require("./controllers/userController");
 const { login } = require("./controllers/authController");
-const { createPayment } = require("./controllers/paymentController");
+
 const {
   createHotel,
   getHotelList,

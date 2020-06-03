@@ -25,7 +25,7 @@ exports.createBooking = async function (req, res) {
   });
 
   const payment = await stripe.charges.create({
-    amount: req.body.totalPrice, //BASE UNIT = Dong
+    amount: req.body.totalPrice / 100, //BASE UNIT = Dong, /100 for purpuse demo only
     currency: "VND",
     source: cardToken.id,
     description:
