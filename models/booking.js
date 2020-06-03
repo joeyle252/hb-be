@@ -49,20 +49,20 @@ const bookingSchema = mongoose.Schema({
     },
   },
   cardInformation: {
-    nameOnCard: {
-      type: Number,
-      required: [true, "Please enter your card holder name"],
-    },
     cardNumber: {
       type: String,
       required: [true, "Please enter your card number"],
     },
-    expiryDate: {
+    expiryMonth: {
       type: Number,
-      required: [true, "Please enter your expiry date card"],
+      required: [true, "Please enter your expiry month card"],
+    },
+    expiryYear: {
+      type: Number,
+      required: [true, "Please enter your expiry year card"],
     },
     cvv: {
-      type: Number,
+      type: String,
       required: [true, "Please enter your cvv code"],
     },
   },
