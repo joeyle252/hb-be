@@ -7,6 +7,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const { createUser, updateUser } = require("./controllers/userController");
 const { login } = require("./controllers/authController");
+const { createPayment } = require("./controllers/paymentController");
 const {
   createHotel,
   getHotelList,
@@ -45,6 +46,8 @@ router.get("/hotel/:id", getHotelDetail);
 
 router.post("/booking", createBooking);
 router.put("/user/bookingId", updateBooking);
+
+//router.post("/user/bookingId/payment", createPayment);
 
 app.listen(process.env.PORT, () => {
   console.log("app is running on port ", process.env.PORT);

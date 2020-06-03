@@ -48,6 +48,24 @@ const bookingSchema = mongoose.Schema({
       required: [true, "your booking must have a phone number"],
     },
   },
+  cardInformation: {
+    nameOnCard: {
+      type: Number,
+      required: [true, "Please enter your card holder name"],
+    },
+    cardNumber: {
+      type: String,
+      required: [true, "Please enter your card number"],
+    },
+    expiryDate: {
+      type: Number,
+      required: [true, "Please enter your expiry date card"],
+    },
+    cvv: {
+      type: Number,
+      required: [true, "Please enter your cvv code"],
+    },
+  },
   selectedRooms: {
     standard: {
       type: Number,
